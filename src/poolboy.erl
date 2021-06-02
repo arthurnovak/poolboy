@@ -249,11 +249,12 @@ code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
 start_pool(StartFun, PoolArgs, WorkerArgs) ->
+    Opts = [{spawn_opt, [{fullsweep_after, 0}]}],
     case proplists:get_value(name, PoolArgs) of
         undefined ->
-            gen_server:StartFun(?MODULE, {PoolArgs, WorkerArgs}, []);
+            gen_server:StartFun(?MODULE, {PoolArgs, WorkerArgs}, Opts);
         Name ->
-            gen_server:StartFun(Name, ?MODULE, {PoolArgs, WorkerArgs}, [])
+            gen_server:StartFun(Name, ?MODULE, {PoolArgs, WorkerArgs}, Opts)
     end.
 
 new_worker(Sup) ->
